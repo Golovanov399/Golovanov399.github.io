@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas height=400 width=400 id="myCanvas">Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
+
+var map = [
+	[1, 0, 1, 0, 1, 0, 1],
+	[0, 1, 0, 0, 0, 1, 0],
+	[1, 0, 1, 0, 1, 0, 0],
+	[0, 0, 0, 1, 0, 0, 0],
+	[0, 1, 0, 0, 1, 1, 0],
+	[0, 1, 0, 1, 0, 1, 0],
+	[0, 1, 1, 0, 0, 1, 0]
+];
+
+function sample() {
+	var c = document.getElementById("tb");
+	var lines = c.value.split("\n");
+
+	var h = map.length;
+	var w = map[0].length;
+
+	for (var i = 0; i < h; ++i) {
+		for (var j = 0; j < w; ++j) {
+			map[i][j] = 0;
+		}
+	}
+
+	for (var i in lines) {
+		var line = lines[i];
+		var pts = line.split(" ").map(Number);
+		for (var j = 0; j + 1 < pts.length; j += 2) {
+			map[pts[j]][pts[j + 1]] = 1;
+		}
+	}
+
+	drawField();
+}
+
+function drawField() {
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	var size = 50;
+	var h = map.length;
+	var w = map[0].length;
+	// console.log(map);
+	for (var i = 0; i < h; ++i) {
+		for (var j = 0; j < w; ++j) {
+			if (map[j][i]) {
+				ctx.fillStyle = "#000000";
+			} else {
+				ctx.fillStyle = "#FFFFFF";
+			}
+			ctx.fillRect(i * size, j * size, size, size);
+
+			ctx.fillStyle = "#000000";
+			ctx.moveTo(i * size, j * size);
+			ctx.lineTo((i + 1) * size, j * size);
+			ctx.lineTo((i + 1) * size, (j + 1) * size);
+			ctx.lineTo(i * size, (j + 1) * size);
+			ctx.lineTo(i * size, j * size);
+			ctx.stroke();
+		}
+	}
+}
+
+drawField();
+
+var ctr = 0;
+
+function mouseMove(e)
+{
+	var mouseX, mouseY;
+
+	if (e.offsetX) {
+		mouseX = e.offsetX;
+		mouseY = e.offsetY;
+	}
+	else if (e.layerX) {
+		mouseX = e.layerX;
+		mouseY = e.layerY;
+	}
+	alert("lol");
+
+	ctr = ctr + 1;
+	lol.value = "lol " + ctr;
+}
+
+document.addEventListener("mousemove", function(){
+	ctr = ctr + 1;
+	lol.value = "lol " + ctr;
+});
+
+</script>
+<!-- 
+<p><strong>Note:</strong> The canvas tag is not supported in Internet 
+Explorer 8 and earlier versions.</p> -->
+
+<br><textarea id="tb" rows=14 cols=88 onkeyup="sample()" onchange="sample()"></textarea><br>
+<input type="button" value="lol" id="lol" onclick="sample()">
+
+</body>
+</html>
