@@ -55,7 +55,7 @@ async function refreshField() {
 
 	// drawField();
 	// whenToDraw = new Date().getTime() + 300;
-	fieldDrawEvent = setTimeout(drawField, 70);
+	fieldDrawEvent = setTimeout(drawField, 10);
 }
 
 function drawField() {

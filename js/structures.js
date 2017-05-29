@@ -91,12 +91,12 @@ function Cartesian() {
 	this.has = function(key) {
 		let cur = this.root;
 		while (cur != -1) {
-			if (this.nodes[cur].key == key) {
-				return true;
-			} else if (this.nodes[cur].key < key) {
+			if (this.nodes[cur].key < key) {
 				cur = this.nodes[cur].r;
-			} else {
+			} else if (this.nodes[cur].key > key) {
 				cur = this.nodes[cur].l;
+			} else {
+				return true;
 			}
 		}
 		return false;
