@@ -2,54 +2,126 @@
 <html>
 <body>
 
-<canvas height=400 width=400 id="myCanvas">Your browser does not support the HTML5 canvas tag.</canvas>
+<canvas width=800 height=400 id="myCanvas">Your browser does not support the HTML5 canvas tag.</canvas>
 
 <script>
 
-var map = [
-	[1, 0, 1, 0, 1, 0, 1],
-	[0, 1, 0, 0, 0, 1, 0],
-	[1, 0, 1, 0, 1, 0, 0],
-	[0, 0, 0, 1, 0, 0, 0],
-	[0, 1, 0, 0, 1, 1, 0],
-	[0, 1, 0, 1, 0, 1, 0],
-	[0, 1, 1, 0, 0, 1, 0]
-];
+var width = document.getElementById("myCanvas").width;
+var height = document.getElementById("myCanvas").height;
 
-function sample() {
-	var c = document.getElementById("tb");
-	var lines = c.value.split("\n");
+var cells = [];
+// var whenToDraw = 0;
+var fieldDrawEvent;
 
-	var h = map.length;
-	var w = map[0].length;
-
-	for (var i = 0; i < h; ++i) {
-		for (var j = 0; j < w; ++j) {
-			map[i][j] = 0;
+function equalsList(a, b) {
+	if (a.length != b.length) {
+		return false;
+	}
+	for (var i = 0; i < a.length; i += 1) {
+		if (a[i] != b[i]) {
+			return false;
 		}
 	}
+	return true;
+}
+
+function hasList(cont, x) {
+	for (var i = 0; i < cont.length; i += 1) {
+		if (equalsList(cont[i], x)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function refreshField() {
+	var c = null;
+	while (c == null) {
+		c = document.getElementById("textbox");
+		await sleep(10);
+	}
+	var lines = c.value.split("\n");
+
+	// for (var i = 0; i < h; ++i) {
+	// 	for (var j = 0; j < w; ++j) {
+	// 		map[i][j] = 0;
+	// 	}
+	// }
+	cells = [];
 
 	for (var i in lines) {
 		var line = lines[i];
-		var pts = line.split(" ").map(Number);
+		var pts = line.trimRight().split(" ").map(Number).filter(function(x){ return !isNaN(x); });
 		for (var j = 0; j + 1 < pts.length; j += 2) {
-			map[pts[j]][pts[j + 1]] = 1;
+			cells.push([pts[j], pts[j + 1]]);
 		}
 	}
 
-	drawField();
+	// drawField();
+	// whenToDraw = new Date().getTime() + 300;
+	fieldDrawEvent = setTimeout(drawField, 70);
 }
 
 function drawField() {
+	// if (new Date().getTime() < whenToDraw || whenToDraw == 0) {
+	// 	return;
+	// }
+
+	// whenToDraw = 0;
+
 	var c = document.getElementById("myCanvas");
 	var ctx = c.getContext("2d");
-	var size = 50;
-	var h = map.length;
-	var w = map[0].length;
+
+	var min_x, max_x, min_y, max_y;
+
+	if (cells.length == 0) {
+		min_x = 0;
+		min_y = 0;
+		max_x = 0;
+		max_y = 0;
+	} else {
+		// var tmp = cells.values().next().value;
+		// console.log(tmp);
+		min_x = cells[0][0];
+		max_x = cells[0][0];
+		min_y = cells[0][1];
+		max_y = cells[0][1];
+	}
+
+	cells.forEach(function(cell){
+		min_x = Math.min(min_x, cell[0]);
+		max_x = Math.max(max_x, cell[0]);
+		min_y = Math.min(min_y, cell[1]);
+		max_y = Math.max(max_y, cell[1]);
+	});
+
+	var offset = 2;
+
+	var len_x = max_x - min_x + 2 * offset + 1;
+	var len_y = max_y - min_y + 2 * offset + 1;
+
+	if (len_x > 30 || len_y > 30) {
+		ctx.clearRect(0, 0, width, height);
+		ctx.font = "24px sans-serif";
+		ctx.fillText("The bounding rectangle is", Math.floor(width / 3), Math.floor(height / 3), Math.floor(width / 3));
+		ctx.fillText("so fukcing big", Math.floor(width / 3), Math.floor(height / 3) + 24, Math.floor(width / 3));
+		return;
+	}
+
+	// console.log(min_x, max_x, min_y, max_y);
+
+	var size = Math.floor(Math.min(width / len_x, height / len_y));
 	// console.log(map);
 	ctx.save();
-	for (var i = 0; i < h; ++i) {
-		for (var j = 0; j < w; ++j) {
+	ctx.clearRect(0, 0, width, height);
+	ctx.beginPath();
+	// console.log(cells);
+	for (var i = 0; i * size < width; ++i) {
+		for (var j = 0; j * size < height; ++j) {
 			ctx.fillStyle = "#000000";
 			ctx.moveTo(i * size, j * size);
 			ctx.lineTo((i + 1) * size, j * size);
@@ -58,49 +130,54 @@ function drawField() {
 			ctx.lineTo(i * size, j * size);
 			ctx.stroke();
 
-			if (map[j][i] == 0) {
+			if (!hasList(cells, [i - offset + min_x, j - offset + min_y])) {
 				ctx.fillStyle = "#FFFFFF";
 			}
-			ctx.fillRect(i * size, j * size, size, size);
+			ctx.fillRect(i * size + 1, j * size + 1, size - 2, size - 2);
 		}
 	}
 	ctx.restore();
 }
 
-drawField();
+refreshField();
 
-var ctr = 0;
+// setInterval(drawField, 100);
 
-function mouseMove(e)
-{
-	var mouseX, mouseY;
+// var ctr = 0;
 
-	if (e.offsetX) {
-		mouseX = e.offsetX;
-		mouseY = e.offsetY;
-	}
-	else if (e.layerX) {
-		mouseX = e.layerX;
-		mouseY = e.layerY;
-	}
-	alert("lol");
+// function mouseMove(e)
+// {
+// 	var mouseX, mouseY;
 
-	ctr = ctr + 1;
-	lol.value = "lol " + ctr;
-}
+// 	if (e.offsetX) {
+// 		mouseX = e.offsetX;
+// 		mouseY = e.offsetY;
+// 	}
+// 	else if (e.layerX) {
+// 		mouseX = e.layerX;
+// 		mouseY = e.layerY;
+// 	}
+// 	alert("lol");
 
-document.addEventListener("mousemove", function(){
-	ctr = ctr + 1;
-	lol.value = "lol " + ctr;
-});
+// 	ctr = ctr + 1;
+// 	lol.value = "lol " + ctr;
+// }
+
+// document.addEventListener("mousemove", function(){
+// 	ctr = ctr + 1;
+// 	lol.value = "lol " + ctr;
+// });
 
 </script>
 <!-- 
 <p><strong>Note:</strong> The canvas tag is not supported in Internet 
 Explorer 8 and earlier versions.</p> -->
 
-<br><textarea id="tb" rows=14 cols=88 onkeyup="sample()" onchange="sample()"></textarea><br>
-<input type="button" value="lol" id="lol" onclick="sample()">
+<br><textarea id="textbox" rows=14 cols=88 onkeyup="refreshField()" onchange="refreshField()" autofocus>1 1 1 2 1 4 1 5 2 3 3 1 3 2 3 4 3 5
+5 1 5 2 6 3 7 1 7 2 7 3 7 4 6 5 5 5
+9 1 9 2 9 3 9 4 9 5 10 4 11 3 12 1 12 2 12 3 12 4 12 5 10 -1 11 -1
+</textarea><br>
+<!-- <input type="button" value="lol" id="lol" onclick="sample()"> -->
 
 </body>
 </html>
