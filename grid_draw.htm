@@ -47,15 +47,9 @@ function drawField() {
 	var h = map.length;
 	var w = map[0].length;
 	// console.log(map);
+	ctx.save();
 	for (var i = 0; i < h; ++i) {
 		for (var j = 0; j < w; ++j) {
-			if (map[j][i]) {
-				ctx.fillStyle = "#000000";
-			} else {
-				ctx.fillStyle = "#FFFFFF";
-			}
-			ctx.fillRect(i * size, j * size, size, size);
-
 			ctx.fillStyle = "#000000";
 			ctx.moveTo(i * size, j * size);
 			ctx.lineTo((i + 1) * size, j * size);
@@ -63,8 +57,14 @@ function drawField() {
 			ctx.lineTo(i * size, (j + 1) * size);
 			ctx.lineTo(i * size, j * size);
 			ctx.stroke();
+
+			if (map[j][i] == 0) {
+				ctx.fillStyle = "#FFFFFF";
+			}
+			ctx.fillRect(i * size, j * size, size, size);
 		}
 	}
+	ctx.restore();
 }
 
 drawField();
