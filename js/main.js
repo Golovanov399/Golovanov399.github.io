@@ -1,7 +1,7 @@
 var width = document.getElementById("myCanvas").width;
 var height = document.getElementById("myCanvas").height;
 
-var cells = [];
+var cells = new Cartesian();
 // var whenToDraw = 0;
 var fieldDrawEvent;
 
@@ -43,13 +43,13 @@ async function refreshField() {
 	// 		map[i][j] = 0;
 	// 	}
 	// }
-	cells = [];
+	cells = new Cartesian();
 
 	for (var i in lines) {
 		var line = lines[i];
 		var pts = line.trimRight().split(" ").map(Number).filter(function(x) { return !isNaN(x); });
 		for (var j = 0; j + 1 < pts.length; j += 2) {
-			cells.push([pts[j], pts[j + 1]]);
+			cells.add([pts[j], pts[j + 1]]);
 		}
 	}
 
@@ -78,10 +78,11 @@ function drawField() {
 	} else {
 		// var tmp = cells.values().next().value;
 		// console.log(tmp);
-		min_x = cells[0][0];
-		max_x = cells[0][0];
-		min_y = cells[0][1];
-		max_y = cells[0][1];
+		let cell = cells.nodes[cells.root].key;
+		min_x = cell[0];
+		max_x = cell[0];
+		min_y = cell[1];
+		max_y = cell[1];
 	}
 
 	cells.forEach(function(cell){
@@ -96,7 +97,14 @@ function drawField() {
 	var len_x = max_x - min_x + 2 * offset + 1;
 	var len_y = max_y - min_y + 2 * offset + 1;
 
-	if (Math.max(len_x, len_y) > 40) {
+	var size = Math.floor(Math.min(width / len_x, height / len_y));
+	if (size == 0) {
+		size = 1;
+	}
+	var cnt_x = Math.floor(width / size);
+	var cnt_y = Math.floor(height / size);
+
+	if (cnt_x + cnt_y > 200) {
 		ctx.clearRect(0, 0, width, height);
 		ctx.font = "24px sans-serif";
 		ctx.fillText("The bounding rectangle is", Math.floor(width / 3), Math.floor(height / 3), Math.floor(width / 3));
@@ -104,30 +112,56 @@ function drawField() {
 		return;
 	}
 
+	if (cells.size() > 1000) {
+		ctx.clearRect(0, 0, width, height);
+		ctx.font = "24px sans-serif";
+		ctx.fillText("The number of black cells", Math.floor(width / 3), Math.floor(height / 3), Math.floor(width / 3));
+		ctx.fillText("is so fukcing big", Math.floor(width / 3), Math.floor(height / 3) + 24, Math.floor(width / 3));
+		return;
+	}
+
 	// console.log(min_x, max_x, min_y, max_y);
 
-	var size = Math.floor(Math.min(width / len_x, height / len_y));
-	// console.log(map);
 	ctx.save();
 	ctx.clearRect(0, 0, width, height);
 	ctx.beginPath();
-	// console.log(cells);
-	for (var i = 0; i * size < width; ++i) {
-		for (var j = 0; j * size < height; ++j) {
-			ctx.fillStyle = "#000000";
-			ctx.moveTo(i * size, j * size);
-			ctx.lineTo((i + 1) * size, j * size);
-			ctx.lineTo((i + 1) * size, (j + 1) * size);
-			ctx.lineTo(i * size, (j + 1) * size);
-			ctx.lineTo(i * size, j * size);
-			ctx.stroke();
 
-			if (!hasList(cells, [i - offset + min_x, j - offset + min_y])) {
-				ctx.fillStyle = "#FFFFFF";
-			}
-			ctx.fillRect(i * size + 1, j * size + 1, size - 2, size - 2);
-		}
+	ctx.fillStyle = "#000000";
+	for (var i = 0; i * size < width; ++i) {
+		ctx.moveTo(i * size, 0);
+		ctx.lineTo(i * size, height);
+		ctx.stroke();
 	}
+	for (var j = 0; j * size < height; ++j) {
+		ctx.moveTo(0, j * size);
+		ctx.lineTo(width, j * size);
+		ctx.stroke();
+	}
+
+	ctx.globalAlpha = 0.6;
+	cells.forEach(function(cell) {
+		let i = cell[0] - min_x + offset;
+		let j = cell[1] - min_y + offset;
+		ctx.fillRect(i * size, j * size, size, size);
+	});
+	ctx.globalAlpha = 1.0;
+
+	// for (var i = 0; i * size < width; ++i) {
+	// 	for (var j = 0; j * size < height; ++j) {
+	// 		ctx.fillStyle = "#000000";
+	// 		ctx.moveTo(i * size, j * size);
+	// 		ctx.lineTo((i + 1) * size, j * size);
+	// 		ctx.lineTo((i + 1) * size, (j + 1) * size);
+	// 		ctx.lineTo(i * size, (j + 1) * size);
+	// 		ctx.lineTo(i * size, j * size);
+	// 		ctx.stroke();
+
+	// 		if (!hasList(cells, [i - offset + min_x, j - offset + min_y])) {
+	// 			ctx.fillStyle = "#FFFFFF";
+	// 		}
+	// 		ctx.fillRect(i * size + 1, j * size + 1, size - 2, size - 2);
+	// 	}
+	// }
 	ctx.restore();
 }
 

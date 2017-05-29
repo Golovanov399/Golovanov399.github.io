@@ -114,4 +114,25 @@ function Cartesian() {
 	this.remove = function(key) {
 		// is not needed yet
 	};
+
+	this.forEach = function(callback) {
+		let stack = [];
+		if (this.root != -1) {
+			stack.push(this.root);
+		}
+		while (stack.length > 0) {
+			let idx = stack.pop();
+			callback(this.nodes[idx].key);
+			if (this.nodes[idx].l > -1) {
+				stack.push(this.nodes[idx].l);
+			}
+			if (this.nodes[idx].r > -1) {
+				stack.push(this.nodes[idx].r);
+			}
+		}
+	};
+
+	this.size = function() {
+		return this.nodes.length;
+	};
 }
