@@ -38,33 +38,20 @@ async function refreshField() {
 	}
 	var lines = c.value.split("\n");
 
-	// for (var i = 0; i < h; ++i) {
-	// 	for (var j = 0; j < w; ++j) {
-	// 		map[i][j] = 0;
-	// 	}
-	// }
 	cells = new Cartesian();
 
 	for (var i in lines) {
 		var line = lines[i];
 		var pts = line.trimRight().split(" ").map(Number).filter(function(x) { return !isNaN(x); });
 		for (var j = 0; j + 1 < pts.length; j += 2) {
-			cells.add([pts[j], pts[j + 1]]);
+			cells.add([pts[j], -pts[j + 1]]);
 		}
 	}
 
-	// drawField();
-	// whenToDraw = new Date().getTime() + 300;
 	fieldDrawEvent = setTimeout(drawField, 10);
 }
 
 function drawField() {
-	// if (new Date().getTime() < whenToDraw || whenToDraw == 0) {
-	// 	return;
-	// }
-
-	// whenToDraw = 0;
-
 	var c = document.getElementById("myCanvas");
 	var ctx = c.getContext("2d");
 
@@ -76,8 +63,6 @@ function drawField() {
 		max_x = 0;
 		max_y = 0;
 	} else {
-		// var tmp = cells.values().next().value;
-		// console.log(tmp);
 		let cell = cells.nodes[cells.root].key;
 		min_x = cell[0];
 		max_x = cell[0];
@@ -120,8 +105,6 @@ function drawField() {
 		return;
 	}
 
-	// console.log(min_x, max_x, min_y, max_y);
-
 	ctx.save();
 	ctx.clearRect(0, 0, width, height);
 	ctx.beginPath();
@@ -146,22 +129,6 @@ function drawField() {
 	});
 	ctx.globalAlpha = 1.0;
 
-	// for (var i = 0; i * size < width; ++i) {
-	// 	for (var j = 0; j * size < height; ++j) {
-	// 		ctx.fillStyle = "#000000";
-	// 		ctx.moveTo(i * size, j * size);
-	// 		ctx.lineTo((i + 1) * size, j * size);
-	// 		ctx.lineTo((i + 1) * size, (j + 1) * size);
-	// 		ctx.lineTo(i * size, (j + 1) * size);
-	// 		ctx.lineTo(i * size, j * size);
-	// 		ctx.stroke();
-
-	// 		if (!hasList(cells, [i - offset + min_x, j - offset + min_y])) {
-	// 			ctx.fillStyle = "#FFFFFF";
-	// 		}
-	// 		ctx.fillRect(i * size + 1, j * size + 1, size - 2, size - 2);
-	// 	}
-	// }
 	ctx.restore();
 }
 
