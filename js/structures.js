@@ -4,7 +4,7 @@ function PriorityQueue() {
 		this.a.push(x);
 		var cur = this.a.length - 1;
 		while (cur > 0) {
-			let nx = Math.floor((cur - 1) / 2);
+			var nx = Math.floor((cur - 1) / 2);
 			if (this.a[cur] < this.a[nx]) {
 				[this.a[cur], this.a[nx]] = [this.a[nx], this.a[cur]];
 				cur = nx;
@@ -23,8 +23,8 @@ function PriorityQueue() {
 		}
 		this.a[0] = this.a.slice(-1)[0];
 		this.a.pop();
-		let cur = 0;
-		let len = this.a.length;
+		var cur = 0;
+		var len = this.a.length;
 		while (true) {
 			nx = cur;
 			if (2 * cur + 1 < len) {
@@ -64,11 +64,11 @@ function Cartesian() {
 			return [-1, -1];
 		}
 		if (this.nodes[idx].key <= key) {
-			let tmp = split(this.nodes[idx].r, key);
+			var tmp = split(this.nodes[idx].r, key);
 			this.nodes[idx].r = tmp[0];
 			return [idx, tmp[1]];
 		} else {
-			let tmp = split(this.nodes[idx].l, key);
+			var tmp = split(this.nodes[idx].l, key);
 			this.nodes[idx].l = tmp[1];
 			return [tmp[0], idx];
 		}
@@ -89,7 +89,7 @@ function Cartesian() {
 	}
 
 	this.has = function(key) {
-		let cur = this.root;
+		var cur = this.root;
 		while (cur != -1) {
 			if (this.nodes[cur].key < key) {
 				cur = this.nodes[cur].r;
@@ -107,7 +107,7 @@ function Cartesian() {
 			return;
 		}
 		this.nodes.push(new Node(key));
-		let tmp = split(this.root, key);
+		var tmp = split(this.root, key);
 		this.root = merge(merge(tmp[0], this.nodes.length - 1), tmp[1]);
 	};
 
@@ -116,12 +116,12 @@ function Cartesian() {
 	};
 
 	this.forEach = function(callback) {
-		let stack = [];
+		var stack = [];
 		if (this.root != -1) {
 			stack.push(this.root);
 		}
 		while (stack.length > 0) {
-			let idx = stack.pop();
+			var idx = stack.pop();
 			callback(this.nodes[idx].key);
 			if (this.nodes[idx].l > -1) {
 				stack.push(this.nodes[idx].l);

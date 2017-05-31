@@ -63,7 +63,7 @@ function drawField() {
 		max_x = 0;
 		max_y = 0;
 	} else {
-		let cell = cells.nodes[cells.root].key;
+		var cell = cells.nodes[cells.root].key;
 		min_x = cell[0];
 		max_x = cell[0];
 		min_y = cell[1];
@@ -123,8 +123,8 @@ function drawField() {
 
 	ctx.globalAlpha = 0.6;
 	cells.forEach(function(cell) {
-		let i = cell[0] - min_x + offset;
-		let j = cell[1] - min_y + offset;
+		var i = cell[0] - min_x + offset;
+		var j = cell[1] - min_y + offset;
 		ctx.fillRect(i * size, j * size, size, size);
 	});
 	ctx.globalAlpha = 1.0;
