@@ -72,7 +72,7 @@ function Cartesian() {
 			this.nodes[idx].l = tmp[1];
 			return [tmp[0], idx];
 		}
-	}
+	};
 
 	var merge = (left, right) => {
 		if (left == -1) {
@@ -86,7 +86,7 @@ function Cartesian() {
 			this.nodes[right].l = merge(left, this.nodes[right].l);
 			return right;
 		}
-	}
+	};
 
 	this.has = function(key) {
 		var cur = this.root;
