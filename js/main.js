@@ -27,14 +27,15 @@ function hasList(cont, x) {
 }
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function refreshField() {
 	var c = null;
+	let zaloopa;
 	while (c == null) {
 		c = document.getElementById("textbox");
-		await sleep(10);
+		zaloopa = await sleep(10);
 	}
 	var lines = c.value.split("\n");
 
