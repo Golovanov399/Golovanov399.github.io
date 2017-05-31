@@ -2,7 +2,7 @@ function PriorityQueue() {
 	this.a = [];
 	this.add = function(x) {
 		this.a.push(x);
-		let cur = this.a.length - 1;
+		var cur = this.a.length - 1;
 		while (cur > 0) {
 			let nx = Math.floor((cur - 1) / 2);
 			if (this.a[cur] < this.a[nx]) {
