@@ -134,10 +134,10 @@ function drawField() {
 		return;
 	}
 
-	if (total_count > 1000) {
+	if (total_count > 2000) {
 		ctx.clearRect(0, 0, width, height);
 		ctx.font = "24px sans-serif";
-		ctx.fillText("The number of black cells", Math.floor(width / 3), Math.floor(height / 3), Math.floor(width / 3));
+		ctx.fillText("The number of colored cells", Math.floor(width / 3), Math.floor(height / 3), Math.floor(width / 3));
 		ctx.fillText("is so fukcing big", Math.floor(width / 3), Math.floor(height / 3) + 24, Math.floor(width / 3));
 		return;
 	}
