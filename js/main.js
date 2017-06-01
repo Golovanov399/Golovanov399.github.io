@@ -77,7 +77,7 @@ function refreshField() {
 		} else if (token in colors) {
 			data.push(colors[token]);
 		} else if (isColor(token)) {
-			data.push(token);
+			data.push(token.toUpperCase());
 		}
 	});
 
