@@ -26,15 +26,19 @@ function hasList(cont, x) {
 	return false;
 }
 
-function sleep(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
-};
+function sleepHelp(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-async function refreshField() {
+function sleep(ms) {
+	sleepHelp(ms).then(() => {});
+}
+
+function refreshField() {
 	var c = null;
 	while (c == null) {
 		c = document.getElementById("textbox");
-		await sleep(10);
+		sleep(10);
 	}
 	var lines = c.value.split("\n");
 
