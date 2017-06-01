@@ -1,30 +1,8 @@
 var width = document.getElementById("myCanvas").width;
 var height = document.getElementById("myCanvas").height;
 
-var cells = new Cartesian();
-// var whenToDraw = 0;
+var cells;
 var fieldDrawEvent;
-
-function equalsList(a, b) {
-	if (a.length != b.length) {
-		return false;
-	}
-	for (var i = 0; i < a.length; i += 1) {
-		if (a[i] != b[i]) {
-			return false;
-		}
-	}
-	return true;
-}
-
-function hasList(cont, x) {
-	for (var i = 0; i < cont.length; i += 1) {
-		if (equalsList(cont[i], x)) {
-			return true;
-		}
-	}
-	return false;
-}
 
 function sleepHelp(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -34,6 +12,34 @@ function sleep(ms) {
 	sleepHelp(ms).then(() => {});
 }
 
+function isSpace(c) {
+	return ((c == ' ') || (c == '\t') || (c == '\n'));
+}
+
+function divideByTokens(str) {
+	var result = [];
+	var last = "";
+	for (var i in str) {
+		var c = str[i];
+		if (isSpace(c)) {
+			if (last != "") {
+				result.push(last);
+			}
+			last = "";
+		} else {
+			last += c;
+		}
+	}
+	if (last != "") {
+		result.push(last);
+	}
+	return result;
+}
+
+var colors = {"black": "#000000", "red": "#FF0000", "green": "#008800", "blue": "#0000FF",
+			  "yellow": "#FFFF00", "orange": "#FFAA00", "gray": "#888888", "white": "#FFFFFF"};
+
+
 function refreshField() {
 	var c = null;
 	while (c == null) {
@@ -42,13 +48,42 @@ function refreshField() {
 	}
 	var lines = c.value.split("\n");
 
-	cells = new Cartesian();
+	var tokens = [];
 
 	for (var i in lines) {
-		var line = lines[i];
-		var pts = line.trimRight().split(" ").map(Number).filter(function(x) { return !isNaN(x); });
-		for (var j = 0; j + 1 < pts.length; j += 2) {
-			cells.add([pts[j], -pts[j + 1]]);
+		tokens = tokens.concat(divideByTokens(lines[i]));
+	}
+
+	var data = [];
+	tokens.forEach(function(token) {
+		var tmp = Number(token);
+		if (Number.isInteger(tmp)) {
+			data.push(tmp);
+		} else if (token in colors) {
+			data.push(colors[token]);
+		}
+	});
+
+	var last_x, last_y;
+	cells = [];
+	for (var color in colors) {
+		cells[colors[color]] = new Cartesian();
+	}
+	var current_color = colors["black"];
+	for (var x in data) {
+		if (Number.isInteger(data[x])) {
+			if (isNaN(last_x)) {
+				last_x = data[x];
+			} else if (isNaN(last_y)) {
+				last_y = data[x];
+				cells[current_color].add([last_x, -last_y]);
+				last_x = NaN;
+				last_y = NaN;
+			}
+		} else {
+			last_x = NaN;
+			last_y = NaN;
+			current_color = data[x];
 		}
 	}
 
@@ -60,26 +95,24 @@ function drawField() {
 	var ctx = c.getContext("2d");
 
 	var min_x, max_x, min_y, max_y;
+	var total_count = 0;
 
-	if (cells.length == 0) {
-		min_x = 0;
-		min_y = 0;
-		max_x = 0;
-		max_y = 0;
-	} else {
-		var cell = cells.nodes[cells.root].key;
-		min_x = cell[0];
-		max_x = cell[0];
-		min_y = cell[1];
-		max_y = cell[1];
+	for (var color in cells) {
+		cells[color].forEach(function(cell){
+			if (isNaN(min_x)) {
+				min_x = cell[0];
+				max_x = cell[0];
+				min_y = cell[1];
+				max_y = cell[1];
+			} else {
+				min_x = Math.min(min_x, cell[0]);
+				max_x = Math.max(max_x, cell[0]);
+				min_y = Math.min(min_y, cell[1]);
+				max_y = Math.max(max_y, cell[1]);
+			}
+			total_count += 1;
+		});
 	}
-
-	cells.forEach(function(cell){
-		min_x = Math.min(min_x, cell[0]);
-		max_x = Math.max(max_x, cell[0]);
-		min_y = Math.min(min_y, cell[1]);
-		max_y = Math.max(max_y, cell[1]);
-	});
 
 	var offset = 2;
 
@@ -101,7 +134,7 @@ function drawField() {
 		return;
 	}
 
-	if (cells.size() > 1000) {
+	if (total_count > 1000) {
 		ctx.clearRect(0, 0, width, height);
 		ctx.font = "24px sans-serif";
 		ctx.fillText("The number of black cells", Math.floor(width / 3), Math.floor(height / 3), Math.floor(width / 3));
@@ -126,11 +159,16 @@ function drawField() {
 	}
 
 	ctx.globalAlpha = 0.6;
-	cells.forEach(function(cell) {
-		var i = cell[0] - min_x + offset;
-		var j = cell[1] - min_y + offset;
-		ctx.fillRect(i * size, j * size, size, size);
-	});
+
+	for (var color in cells) {
+		ctx.fillStyle = color;
+		cells[color].forEach(function(cell) {
+			var i = cell[0] - min_x + offset;
+			var j = cell[1] - min_y + offset;
+			ctx.fillRect(i * size, j * size, size, size);
+		});
+	}
+
 	ctx.globalAlpha = 1.0;
 
 	ctx.restore();
