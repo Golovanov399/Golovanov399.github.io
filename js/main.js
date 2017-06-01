@@ -36,6 +36,21 @@ function divideByTokens(str) {
 	return result;
 }
 
+function isColor(str) {
+	if (str.length != 7 || str[0] != '#') {
+		return false;
+	}
+	for (var i in str) {
+		if (i == 0) {
+			continue;
+		}
+		if ("0123456789abcdefABCDEF".indexOf(str[i]) == -1) {
+			return false;
+		}
+	}
+	return true;
+}
+
 var colors = {"black": "#000000", "red": "#FF0000", "green": "#008800", "blue": "#0000FF",
 			  "yellow": "#FFFF00", "orange": "#FFAA00", "gray": "#888888", "white": "#FFFFFF"};
 
@@ -61,14 +76,13 @@ function refreshField() {
 			data.push(tmp);
 		} else if (token in colors) {
 			data.push(colors[token]);
+		} else if (isColor(token)) {
+			data.push(token);
 		}
 	});
 
 	var last_x, last_y;
 	cells = [];
-	for (var color in colors) {
-		cells[colors[color]] = new Cartesian();
-	}
 	var current_color = colors["black"];
 	for (var x in data) {
 		if (Number.isInteger(data[x])) {
@@ -76,6 +90,9 @@ function refreshField() {
 				last_x = data[x];
 			} else if (isNaN(last_y)) {
 				last_y = data[x];
+				if (!(current_color in cells)) {
+					cells[current_color] = new Cartesian();
+				}
 				cells[current_color].add([last_x, -last_y]);
 				last_x = NaN;
 				last_y = NaN;
