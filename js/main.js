@@ -51,8 +51,8 @@ function isColor(str) {
 	return true;
 }
 
-var colors = {"black": "#000000", "red": "#FF0000", "green": "#008800", "blue": "#0000FF",
-			  "yellow": "#FFFF00", "orange": "#FFAA00", "gray": "#888888", "white": "#FFFFFF"};
+var colors = {"black": "#000000", "red": "#FF0000", "green": "#007F00", "blue": "#0000FF",
+			  "yellow": "#FFFF00", "orange": "#FFA500", "gray": "#7F7F7F", "white": "#FFFFFF"};
 
 
 function refreshField() {
