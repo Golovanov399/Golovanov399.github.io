@@ -131,7 +131,7 @@ function drawField() {
 		});
 	}
 
-	var offset = 2;
+	var offset = 3;
 
 	var len_x = max_x - min_x + 2 * offset + 1;
 	var len_y = max_y - min_y + 2 * offset + 1;
@@ -146,6 +146,7 @@ function drawField() {
 	if (cnt_x + cnt_y > 200) {
 		ctx.clearRect(0, 0, width, height);
 		ctx.font = "24px sans-serif";
+		ctx.textAlign = "center";
 		ctx.fillText("The bounding rectangle is", Math.floor(width / 3), Math.floor(height / 3), Math.floor(width / 3));
 		ctx.fillText("so fukcing big", Math.floor(width / 3), Math.floor(height / 3) + 24, Math.floor(width / 3));
 		return;
@@ -154,6 +155,7 @@ function drawField() {
 	if (total_count > 2000) {
 		ctx.clearRect(0, 0, width, height);
 		ctx.font = "24px sans-serif";
+		ctx.textAlign = "center";
 		ctx.fillText("The number of colored cells", Math.floor(width / 3), Math.floor(height / 3), Math.floor(width / 3));
 		ctx.fillText("is so fukcing big", Math.floor(width / 3), Math.floor(height / 3) + 24, Math.floor(width / 3));
 		return;
@@ -174,6 +176,23 @@ function drawField() {
 		ctx.lineTo(width, j * size);
 		ctx.stroke();
 	}
+
+	ctx.font = Math.floor(size * 0.7).toString() + "px sans-serif";
+	ctx.textAlign = "center";
+	ctx.fillStyle = "#5f5f5f";
+	ctx.fillText("x", size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
+	ctx.fillText("=", 2 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
+	ctx.fillText((min_x - offset + 3).toString(), 3 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
+	ctx.fillText((min_x - offset + 4).toString(), 4 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
+	ctx.fillText((min_x - offset + 5).toString(), 5 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
+	ctx.fillText("...", 6 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
+
+	ctx.fillText("y", Math.floor(size / 2), cnt_y * size - size - Math.floor(size / 3), size);
+	ctx.fillText("=", Math.floor(size / 2), cnt_y * size - 2 * size - Math.floor(size / 3), size);
+	ctx.fillText((-min_y - cnt_y + offset + 4).toString(), Math.floor(size / 2), cnt_y * size - 3 * size - Math.floor(size / 3), size);
+	ctx.fillText((-min_y - cnt_y + offset + 5).toString(), Math.floor(size / 2), cnt_y * size - 4 * size - Math.floor(size / 3), size);
+	ctx.fillText((-min_y - cnt_y + offset + 6).toString(), Math.floor(size / 2), cnt_y * size - 5 * size - Math.floor(size / 3), size);
+	ctx.fillText("...", Math.floor(size / 2), cnt_y * size - 6 * size - Math.floor(size / 3), size);
 
 	ctx.globalAlpha = 0.6;
 
