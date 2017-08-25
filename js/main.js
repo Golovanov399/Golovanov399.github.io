@@ -4,6 +4,15 @@ var height = document.getElementById("myCanvas").height;
 var cells;
 var fieldDrawEvent;
 
+var mouse_table_x;
+var mouse_table_y;
+
+var last_mouse_x;
+var last_mouse_y;
+
+var bounding_rect_x;
+var bounding_rect_y;
+
 function sleepHelp(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -104,6 +113,8 @@ function refreshField() {
 		}
 	}
 
+	checkMouseChange();
+
 	fieldDrawEvent = setTimeout(drawField, 10);
 }
 
@@ -180,19 +191,35 @@ function drawField() {
 	ctx.font = Math.floor(size * 0.7).toString() + "px sans-serif";
 	ctx.textAlign = "center";
 	ctx.fillStyle = "#5f5f5f";
+
 	ctx.fillText("x", size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
 	ctx.fillText("=", 2 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
 	ctx.fillText((min_x - offset + 3).toString(), 3 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
 	ctx.fillText((min_x - offset + 4).toString(), 4 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
 	ctx.fillText((min_x - offset + 5).toString(), 5 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
-	ctx.fillText("...", 6 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
 
 	ctx.fillText("y", Math.floor(size / 2), cnt_y * size - size - Math.floor(size / 3), size);
 	ctx.fillText("=", Math.floor(size / 2), cnt_y * size - 2 * size - Math.floor(size / 3), size);
 	ctx.fillText((-min_y - cnt_y + offset + 4).toString(), Math.floor(size / 2), cnt_y * size - 3 * size - Math.floor(size / 3), size);
 	ctx.fillText((-min_y - cnt_y + offset + 5).toString(), Math.floor(size / 2), cnt_y * size - 4 * size - Math.floor(size / 3), size);
 	ctx.fillText((-min_y - cnt_y + offset + 6).toString(), Math.floor(size / 2), cnt_y * size - 5 * size - Math.floor(size / 3), size);
-	ctx.fillText("...", Math.floor(size / 2), cnt_y * size - 6 * size - Math.floor(size / 3), size);
+
+	if (mouse_table_x == 6) {
+		ctx.fillText((min_x - offset + 6).toString(), 6 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
+	} else {
+		ctx.fillText("...", 6 * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
+	}
+	if (mouse_table_x > 6) {
+		ctx.fillText((min_x - offset + mouse_table_x).toString(), (mouse_table_x) * size + Math.floor(size / 2), cnt_y * size - Math.floor(size / 3), size);
+	}
+	if (mouse_table_y == cnt_y - 7) {
+		ctx.fillText((-min_y - mouse_table_y + offset).toString(), Math.floor(size / 2), mouse_table_y * size + Math.floor(size * 2 / 3), size);
+	} else {
+		ctx.fillText("...", Math.floor(size / 2), cnt_y * size - 6 * size - Math.floor(size / 3), size);
+	}
+	if (mouse_table_y < cnt_y - 7) {
+		ctx.fillText((-min_y - mouse_table_y + offset).toString(), Math.floor(size / 2), mouse_table_y * size + Math.floor(size * 2 / 3), size);
+	}
 
 	ctx.globalAlpha = 0.6;
 
@@ -210,6 +237,63 @@ function drawField() {
 	ctx.restore();
 }
 
+function checkMouseChange() {
+	var new_mouse_pos_x, new_mouse_pos_y;
+
+	// copy-pasted from above
+
+	var min_x, max_x, min_y, max_y;
+	for (var color in cells) {
+		cells[color].forEach(function(cell){
+			if (isNaN(min_x)) {
+				min_x = cell[0];
+				max_x = cell[0];
+				min_y = cell[1];
+				max_y = cell[1];
+			} else {
+				min_x = Math.min(min_x, cell[0]);
+				max_x = Math.max(max_x, cell[0]);
+				min_y = Math.min(min_y, cell[1]);
+				max_y = Math.max(max_y, cell[1]);
+			}
+		});
+	}
+
+	var offset = 3;
+
+	var len_x = max_x - min_x + 2 * offset + 1;
+	var len_y = max_y - min_y + 2 * offset + 1;
+
+	var size = Math.floor(Math.min(width / len_x, height / len_y));
+	if (size == 0) {
+		size = 1;
+	}
+
+	// end
+	// TODO: make a special function for it
+
+	new_mouse_pos_x = Math.floor((last_mouse_x - bounding_rect_x) / size);
+	new_mouse_pos_y = Math.floor((last_mouse_y - bounding_rect_y) / size);
+
+	if (new_mouse_pos_x != mouse_table_x || new_mouse_pos_y != mouse_table_y) {
+		mouse_table_x = new_mouse_pos_x;
+		mouse_table_y = new_mouse_pos_y;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function mouseMove(e) {
+	last_mouse_x = e.clientX;
+	last_mouse_y = e.clientY;
+	if (checkMouseChange()) {
+		refreshField();
+	}
+}
+
+bounding_rect_x = document.getElementById("myCanvas").getBoundingClientRect().left;
+bounding_rect_y = document.getElementById("myCanvas").getBoundingClientRect().top;
 refreshField();
 
 // setInterval(drawField, 100);
