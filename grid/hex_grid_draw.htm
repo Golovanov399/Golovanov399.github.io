@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas width=800 height=400 id="myCanvas" onmousemove="mouseMove(event)">Your browser does not support the HTML5 canvas tag.</canvas>
+
+<br><textarea id="textbox" rows=14 cols=88 onkeyup="refreshField()" onchange="refreshField()" autofocus>#ff0000 0 0
+#aa5500 0 1
+#55aa00 0 2
+#00ff00 0 3
+#00aa55 1 2
+#0055aa 2 1
+#0000ff 3 0
+#5500aa 2 0
+#aa0055 1 0
+#555555 1 1
+</textarea><br>
+
+<input type="checkbox" id="axis_box" onclick="refreshField()"> Show axis directions <br>
+<input type="checkbox" id="coords_box" onclick="refreshField()"> Show coordinates <br>
+<input type="checkbox" id="mouse_box" checked=true onclick="refreshField()"> Show cell under cursor <br>
+<input type="checkbox" id="show_grid_box" checked=true onclick="refreshField()"> Show grid <br>
+<image src="no_mouse.png" id="no_mouse_icon" hidden=true>
+
+<!-- <input type="button" value="lol" id="lol"> -->
+
+<script src="js/structures.js"></script>
+<script src="js/hexgrid.js"></script>
+
+</body>
+</html>
