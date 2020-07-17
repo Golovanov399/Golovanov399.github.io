@@ -189,3 +189,51 @@ draw_grid("""
 	...#.#.#
 	...#####
 """.strip().replace("\t", "").split("\n"), "imgs/Cdr.png")
+
+draw_grid("""
+	###
+	#.#
+	###
+""".strip().replace("\t", "").split("\n"), "imgs/nil.png")
+draw_grid("""
+	###
+	###
+	###
+""".strip().replace("\t", "").split("\n"), "imgs/isemptylist.png")
+draw_grid("""
+	..#
+	.##
+	###
+	.##
+	..#
+""".strip().replace("\t", "").split("\n"), "imgs/left_bracket.png")
+draw_grid("""
+	##
+	##
+	##
+	##
+	##
+""".strip().replace("\t", "").split("\n"), "imgs/delim.png")
+draw_grid("""
+	#..
+	##.
+	###
+	##.
+	#..
+""".strip().replace("\t", "").split("\n"), "imgs/right_bracket.png")
+draw_grid("""
+	######
+	##....
+	#.#...
+	#..#..
+	#...#.
+	#....#
+""".strip().replace("\t", "").split("\n"), "imgs/point.png")
+draw_grid("""
+	######
+	#....#
+	#....#
+	#....#
+	#....#
+	######
+""".strip().replace("\t", "").split("\n"), "imgs/draw.png")
