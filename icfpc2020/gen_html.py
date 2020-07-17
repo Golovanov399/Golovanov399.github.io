@@ -57,6 +57,6 @@ with open("page.html", "w") as f:
 	add("pow2", "\\lambda x.2^x", f)
 	add("I", "\\lambda x.x", f)
 	add("Cons", "\\lambda xyz.zxy", f)
-	add("Car", "\\lambda z.(\\lambda xy.x)", f)
-	add("Cdr", "\\lambda z.(\\lambda xy.y)", f)
+	add("Car", "\\lambda z.z(\\lambda xy.x)", f)
+	add("Cdr", "\\lambda z.z(\\lambda xy.y)", f)
 	print(footer, file=f)
