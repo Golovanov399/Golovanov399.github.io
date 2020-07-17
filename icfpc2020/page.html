@@ -11,49 +11,53 @@
 img {
     vertical-align: middle;
 }
+td {padding: 15px;}
+table td:nth-of-type(1) {width: 20%;}
 </style>
 </head>
 <body bgcolor='black'>
 <font size=36 color='white'>
-<center>
 
-<img src='imgs/0.png'/> \( = 0 \)<br><br>
-<img src='imgs/1.png'/> \( = 1 \)<br><br>
-<img src='imgs/2.png'/> \( = 2 \)<br><br>
-<img src='imgs/3.png'/> \( = 3 \)<br><br>
-<img src='imgs/-1.png'/> \( = -1 \)<br><br>
-<img src='imgs/-2.png'/> \( = -2 \)<br><br>
-<img src='imgs/-3.png'/> \( = -3 \)<br><br>
-<img src='imgs/lambda.png'/> \( = \lambda x/y/z \)<br><br>
-<img src='imgs/succ.png'/> \( = \lambda x.(x + 1) \)<br><br>
-<img src='imgs/pred.png'/> \( = \lambda x.(x - 1) \)<br><br>
-<img src='imgs/sum.png'/> \( = \lambda x.\lambda y.(x + y) \)<br><br>
-<img src='imgs/prod.png'/> \( = \lambda x.\lambda y.(x \cdot y) \)<br><br>
-<img src='imgs/div.png'/> \( = \lambda x.\lambda y.(x\text{ div }y) \)<br><br>
-<img src='imgs/eq.png'/> \( = \lambda x.\lambda y.(x = y) \)<br><br>
-<img src='imgs/lt.png'/> \( = \lambda x.\lambda y.(x < y) \)<br><br>
-<img src='imgs/true.png'/> \( = \text{true} \)<br><br>
-<img src='imgs/false.png'/> \( = \text{false} \)<br><br>
-<img src='imgs/modulate.png'/> \( = \lambda x.\text{modulate}(x) \)<br><br>
-<img src='imgs/demodulate.png'/> \( = \lambda x.\text{demodulate}(x) \)<br><br>
-<img src='imgs/negate.png'/> \( = \lambda x.(-x) \)<br><br>
-<img src='imgs/S.png'/> \( = \lambda xyz.xz(yz) \)<br><br>
-<img src='imgs/C.png'/> \( = \lambda xyz.xzy \)<br><br>
-<img src='imgs/B.png'/> \( = \lambda xyz.x(yz) \)<br><br>
-<img src='imgs/K.png'/> \( = \lambda xy.x \)<br><br>
-<img src='imgs/False.png'/> \( = \lambda xy.y \)<br><br>
-<img src='imgs/pow2.png'/> \( = \lambda x.2^x \)<br><br>
-<img src='imgs/I.png'/> \( = \lambda x.x \)<br><br>
-<img src='imgs/Cons.png'/> \( = \lambda xyz.zxy \)<br><br>
-<img src='imgs/Car.png'/> \( = \lambda z.z(\lambda xy.x) \)<br><br>
-<img src='imgs/Cdr.png'/> \( = \lambda z.z(\lambda xy.y) \)<br><br>
+<table align='center'>
+<tr><td>0</td><td><img src='imgs/0.png'/> \( = 0 \)</td></tr>
+<tr><td>1</td><td><img src='imgs/1.png'/> \( = 1 \)</td></tr>
+<tr><td>2</td><td><img src='imgs/2.png'/> \( = 2 \)</td></tr>
+<tr><td>3</td><td><img src='imgs/3.png'/> \( = 3 \)</td></tr>
+<tr><td>-1</td><td><img src='imgs/-1.png'/> \( = -1 \)</td></tr>
+<tr><td>-2</td><td><img src='imgs/-2.png'/> \( = -2 \)</td></tr>
+<tr><td>-3</td><td><img src='imgs/-3.png'/> \( = -3 \)</td></tr>
+<tr><td>ap</td><td><img src='imgs/lambda.png'/> \( = \lambda x/y/z \)</td></tr>
+<tr><td>inc</td><td><img src='imgs/succ.png'/> \( = \lambda x.(x + 1) \)</td></tr>
+<tr><td>dec</td><td><img src='imgs/pred.png'/> \( = \lambda x.(x - 1) \)</td></tr>
+<tr><td>add</td><td><img src='imgs/sum.png'/> \( = \lambda x.\lambda y.(x + y) \)</td></tr>
+<tr><td>mul</td><td><img src='imgs/prod.png'/> \( = \lambda x.\lambda y.(x \cdot y) \)</td></tr>
+<tr><td>div</td><td><img src='imgs/div.png'/> \( = \lambda x.\lambda y.(x\text{ div }y) \)</td></tr>
+<tr><td>eq</td><td><img src='imgs/eq.png'/> \( = \lambda x.\lambda y.(x = y) \)</td></tr>
+<tr><td>lt</td><td><img src='imgs/lt.png'/> \( = \lambda x.\lambda y.(x < y) \)</td></tr>
+<tr><td>true</td><td><img src='imgs/true.png'/> \( = \text{true} \)</td></tr>
+<tr><td>false</td><td><img src='imgs/false.png'/> \( = \text{false} \)</td></tr>
+<tr><td></td><td><img src='imgs/modulate.png'/> \( = \lambda x.\text{modulate}(x) \)</td></tr>
+<tr><td></td><td><img src='imgs/demodulate.png'/> \( = \lambda x.\text{demodulate}(x) \)</td></tr>
+<tr><td>neg</td><td><img src='imgs/negate.png'/> \( = \lambda x.(-x) \)</td></tr>
+<tr><td>s</td><td><img src='imgs/S.png'/> \( = \lambda xyz.xz(yz) \)</td></tr>
+<tr><td>c</td><td><img src='imgs/C.png'/> \( = \lambda xyz.xzy \)</td></tr>
+<tr><td>b</td><td><img src='imgs/B.png'/> \( = \lambda xyz.x(yz) \)</td></tr>
+<tr><td>t</td><td><img src='imgs/K.png'/> \( = \lambda xy.x \)</td></tr>
+<tr><td>f</td><td><img src='imgs/False.png'/> \( = \lambda xy.y \)</td></tr>
+<tr><td></td><td><img src='imgs/pow2.png'/> \( = \lambda x.2^x \)</td></tr>
+<tr><td>i</td><td><img src='imgs/I.png'/> \( = \lambda x.x \)</td></tr>
+<tr><td>cons</td><td><img src='imgs/Cons.png'/> \( = \lambda xyz.zxy \)</td></tr>
+<tr><td>car</td><td><img src='imgs/Car.png'/> \( = \lambda z.z(\lambda xy.x) \)</td></tr>
+<tr><td>cdr</td><td><img src='imgs/Cdr.png'/> \( = \lambda z.z(\lambda xy.y) \)</td></tr>
+</table><center>
 ========================<br>
 <img src='imgs/nil.png'/> = nil = [] = empty list<br><br>
 <img src='imgs/left_bracket.png'/> \(x_1\) <img src='imgs/delim.png'/> \(x_2\) <img src='imgs/delim.png'/> \(\dots\) <img src='imgs/delim.png'/> \(x_n\) <img src='imgs/right_bracket.png'/> = List\((x_1, x_2, \dots, x_n)\)<br><br>
 List\((x_1, x_2, \dots, x_n)\) = Pair(\(x_1\), Pair(\(x_2\), Pair(\(\dots\), Pair(\(x_n\), nil))))<br><br>
-<img src='imgs/point.png'/> = \(\lambda xy.\)Point(x, y)<br><br>
+<img src='imgs/point.png'/> = \(\lambda xy.\)Point(x, y) = Pair(x, y)<br><br>
 <img src='imgs/draw.png'/> = Draw<br><br>
 Draw\([(x_1, y_1), (x_2, y_2), \dots, (x_n, y_n)]\) draws corresponding pixels
+</center>
 
-</center></font></body></html>
+</font></body></html>
 
