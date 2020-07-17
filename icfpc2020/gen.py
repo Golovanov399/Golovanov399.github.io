@@ -122,3 +122,34 @@ draw_grid("""
 	#..
 	#.#
 """.strip().replace("\t", "").split("\n"), "imgs/false.png")
+
+draw_grid("""
+	##.###
+	#..#.#
+	...#.#
+""".strip().replace("\t", "").split("\n"), "imgs/negate.png")
+draw_grid("""
+	##.##.##.###
+	#..#..#..###
+	.........##.
+""".strip().replace("\t", "").split("\n"), "imgs/S.png")
+draw_grid("""
+	##.##.##.###
+	#..#..#..#.#
+	.........##.
+""".strip().replace("\t", "").split("\n"), "imgs/C.png")
+draw_grid("""
+	##.##.##.###
+	#..#..#..##.
+	.........##.
+""".strip().replace("\t", "").split("\n"), "imgs/B.png")
+draw_grid("""
+	##.##.###
+	#..#..#.#
+	......#..
+""".strip().replace("\t", "").split("\n"), "imgs/K.png")
+draw_grid("""
+	##.##.###
+	#..#..#..
+	......#.#
+""".strip().replace("\t", "").split("\n"), "imgs/False.png")
