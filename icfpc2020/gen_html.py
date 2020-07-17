@@ -66,7 +66,7 @@ with open("page.html", "w") as f:
 	add_text("nil", "nil = [] = empty list", f)
 	print("<img src='imgs/left_bracket.png'/> \\(x_1\\) <img src='imgs/delim.png'/> \\(x_2\\) <img src='imgs/delim.png'/> \\(\\dots\\) <img src='imgs/delim.png'/> \\(x_n\\) <img src='imgs/right_bracket.png'/> = List\\((x_1, x_2, \\dots, x_n)\\)<br><br>", file=f)
 	print("List\\((x_1, x_2, \\dots, x_n)\\) = Pair(\\(x_1\\), Pair(\\(x_2\\), Pair(\\(\\dots\\), Pair(\\(x_n\\), nil))))<br><br>", file=f)
-	add_text("point", "\\(\\lambda xy.\\)Point(x, y)", f)
+	add_text("point", "\\(\\lambda xy.\\)Point(x, y) = Pair(x, y)", f)
 	add_text("draw", "Draw", f)
 	print("Draw\\([(x_1, y_1), (x_2, y_2), \\dots, (x_n, y_n)]\\) draws corresponding pixels", file=f)
 	print(footer, file=f)
