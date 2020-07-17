@@ -153,3 +153,39 @@ draw_grid("""
 	#..#..#..
 	......#.#
 """.strip().replace("\t", "").split("\n"), "imgs/False.png")
+
+draw_grid("""
+	##.#######
+	#..#.....#
+	...#..##.#
+	...#.#.#.#
+	...#.#...#
+	...#.....#
+	...#######
+""".strip().replace("\t", "").split("\n"), "imgs/pow2.png")
+draw_grid("""
+	##.##.
+	#..##.
+	......
+""".strip().replace("\t", "").split("\n"), "imgs/I.png")
+draw_grid("""
+	##.##.#####
+	#..#..#.#.#
+	......#.#.#
+	......#.#.#
+	......#####
+""".strip().replace("\t", "").split("\n"), "imgs/Cons.png")
+draw_grid("""
+	##.#####
+	#..#.###
+	...#.#.#
+	...#.#.#
+	...#####
+""".strip().replace("\t", "").split("\n"), "imgs/Car.png")
+draw_grid("""
+	##.#####
+	#..###.#
+	...#.#.#
+	...#.#.#
+	...#####
+""".strip().replace("\t", "").split("\n"), "imgs/Cdr.png")
