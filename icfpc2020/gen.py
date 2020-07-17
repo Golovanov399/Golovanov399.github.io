@@ -3,7 +3,7 @@
 from PIL import Image, ImageDraw
 
 def draw_grid(grid, filename):
-	sz = 50
+	sz = 25
 	h = len(grid)
 	w = len(grid[0])
 	image = Image.new("RGB", (sz * w + 1, sz * h + 1), (0, 0, 0))
