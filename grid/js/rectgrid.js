@@ -154,7 +154,7 @@ function drawField() {
 	var cnt_x = Math.floor(width / size);
 	var cnt_y = Math.floor(height / size);
 
-	if (cnt_x + cnt_y > 200) {
+	if (cnt_x + cnt_y > 1000) {
 		ctx.clearRect(0, 0, width, height);
 		ctx.font = "24px sans-serif";
 		ctx.textAlign = "center";
@@ -163,7 +163,7 @@ function drawField() {
 		return;
 	}
 
-	if (total_count > 2000) {
+	if (total_count > 5000) {
 		ctx.clearRect(0, 0, width, height);
 		ctx.font = "24px sans-serif";
 		ctx.textAlign = "center";
