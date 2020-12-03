@@ -31,7 +31,7 @@ for prob in probs:
 	else:
 		unsolved.append((int(difficulty.text.split()[-1][:-1]), int(idx.text.split()[-1]), name.text.strip('"'), int(solved.text.split()[-1])))
 
-print("<html><head><title>All - Golovanov399 - AndreySergunin</title></head><body bgcolor=black link=orange vlink=orange alink=orange><font color=white size=18>")
+print("<html><head><title>{} problems</title></head><body bgcolor=black link=orange vlink=orange alink=orange><font color=white size=18>".format(len(unsolved)))
 
 unsolved.sort()
 for difficulty, idx, name, _ in unsolved:
