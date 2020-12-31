@@ -11,7 +11,7 @@ Usage:
 """
 
 try:
-	with open("/home/agolovanov/prog/pe/opponent.htm") as f:
+	with open("/home/golovanov/prog/projecteuler/opponent.htm") as f:
 		soup = BeautifulSoup(f.read(), "html.parser")
 except FileNotFoundError:
 	print("need opponent.htm")
