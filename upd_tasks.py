@@ -20,7 +20,7 @@ def scrap_problem(pid):
 		difficulty = difficulty[len("Difficulty rating: "):]
 	statement = f"""
 <div class="all_problems">
-<div class="tooltip"><h3><a href="problem=264">Problem {pid}: {pname}<span class="tooltiptext">{when_published}<br>{cnt_solved}<br>Difficulty rating: {difficulty}</span></a></h3></div>
+<div class="tooltip"><h3><a href="problem={pid}">Problem {pid}: {pname}<span class="tooltiptext">{when_published}<br>{cnt_solved}<br>Difficulty rating: {difficulty}</span></a></h3></div>
 <div class="problem_content">
 
 {statement}
