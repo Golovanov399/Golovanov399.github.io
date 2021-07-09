@@ -92,7 +92,7 @@ var maxX = -inf;
 var minY = inf;
 var maxY = -inf;
 
-function calc_score() {
+function calcScore() {
 	var res = 0;
 	hole.forEach(p => {
 		var tmp = inf;
@@ -247,7 +247,7 @@ function update(timer) {
 		cursor = "move";
 
 		document.getElementById("result").value = '{"vertices": [' + pts.items.map(pt => "[" + (minX + Math.round(pt.x / sz)) + ", " + (minY + Math.round(pt.y / sz)) + "]").join(", ") + ']}';
-		document.getElementById("score").innerHTML = 'Score: ' + calc_score();
+		document.getElementById("score").innerHTML = 'Score: ' + calcScore();
 	}
 
 	lines.eachItem(line => {
@@ -291,4 +291,11 @@ function copyToBuffer() {
 	text.setSelectionRange(0, 99999);
 	document.execCommand("copy");
 	text.selectionStart = text.selectionEnd = 0;
+}
+
+function loadFromField() {
+	var old = document.getElementById("oldResult");
+	const verts = JSON.parse(old.value)
+	pts.items = [];
+	verts["vertices"].forEach(pt => { pts.add(Point((pt[0] - minX) * sz, (pt[1] - minY) * sz)) });
 }
