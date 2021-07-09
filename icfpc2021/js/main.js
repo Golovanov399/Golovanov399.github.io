@@ -92,6 +92,20 @@ var maxX = -inf;
 var minY = inf;
 var maxY = -inf;
 
+function calc_score() {
+	var res = 0;
+	hole.forEach(p => {
+		var tmp = inf;
+		pts.items.forEach(pt => {
+			var x = (pt.x / sz + minX) - p[0];
+			var y = (pt.y / sz + minY) - p[1];
+			tmp = Math.min(tmp, x * x + y * y);
+		});
+		res += tmp;
+	});
+	return Math.round(res);
+}
+
 function closestGrid(x) {
 	const low = x - x % sz;
 	if (x - low < low + sz - x) {
@@ -129,6 +143,9 @@ function chooseTask(idx) {
 	maxX += 1;
 	minY -= 1;
 	maxY += 1;
+
+	w = canvas.width = (maxX - minX) * sz;
+	h = canvas.height = (maxY - minY) * sz;
 
 	pts.items = [];
 	lines.items = [];
@@ -230,6 +247,7 @@ function update(timer) {
 		cursor = "move";
 
 		document.getElementById("result").value = '{"vertices": [' + pts.items.map(pt => "[" + (minX + Math.round(pt.x / sz)) + ", " + (minY + Math.round(pt.y / sz)) + "]").join(", ") + ']}';
+		document.getElementById("score").innerHTML = 'Score: ' + calc_score();
 	}
 
 	lines.eachItem(line => {

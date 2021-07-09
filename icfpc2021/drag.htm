@@ -5,7 +5,8 @@
 <input type="range" id="szRange" min="5" max="20" value="5"> <select id="taskId" onchange="chooseTask(this.options[this.selectedIndex].value);"></select><br>
 
 <canvas width=0 height=0 id="myCanvas">Your browser does not support the HTML5 canvas tag.</canvas><br>
-<input type="text" id="result" readOnly="true"></input> <input type="button" onclick="copyToBuffer()" value="Copy">
+<input type="text" id="result" readOnly="true"></input> <input type="button" onclick="copyToBuffer()" value="Copy"><br>
+<label id="score"></label>
 
 <script src="js/main.js"></script>
 
