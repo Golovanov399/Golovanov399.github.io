@@ -278,6 +278,12 @@ function update(timer) {
 	}
 	ctx.stroke();
 
+	if (closestPoint) {
+		setStyle(lineStyle);
+		ctx.font = "24px serif";
+		ctx.strokeText(pts.items.findIndex((p => p === closestPoint)), closestPoint.x - 10, closestPoint.y - 10);
+	}
+
 	// canvas.style.cursor = cursor;
 
 	requestAnimationFrame(update);
