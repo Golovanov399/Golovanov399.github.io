@@ -256,6 +256,10 @@ const outsidePointStyle = {
 	lineWidth: 2,
 	strokeStyle: "magenta",
 }
+const outsideFixedPointStyle = {
+	lineWidth: 4,
+	strokeStyle: "cyan",
+}
 const highlightStyle = {
 	lineWidth: 3,
 	strokeStyle: "red",
@@ -419,7 +423,7 @@ function update(timer) {
 		} else if (isIn(p)) {
 			setStyle(pt.fixed ? fixedPointStyle : pointStyle);
 		} else {
-			setStyle(outsidePointStyle);
+			setStyle(pt.fixed ? outsideFixedPointStyle : outsidePointStyle);
 		}
 		ctx.beginPath();
 		drawPoint(pt);
