@@ -154,7 +154,7 @@ function chooseTask(idx) {
 }
 
 chooseTask("1");
-for (var i = 1; i < 79; ++i) {
+for (var i = 1; i < 89; ++i) {
 	var nw = document.createElement("option");
 	nw.value = "" + i;
 	nw.innerHTML = "Task #" + i;
