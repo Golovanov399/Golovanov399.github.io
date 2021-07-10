@@ -2,7 +2,10 @@
 <html>
 <body>
 
-<input type="range" id="szRange" min="5" max="20" value="5"> <select id="taskId" onchange="chooseTask(this.options[this.selectedIndex].value);"></select><br>
+<input type="range" id="szRange" min="5" max="20" value="5">
+<select id="taskId" onchange="chooseTask(this.options[this.selectedIndex].value);"></select>
+<input type="checkbox" id="stringsCheck"> Strings mode
+<br>
 
 <canvas width=0 height=0 id="myCanvas">Your browser does not support the HTML5 canvas tag.</canvas><br>
 <input type="text" id="result" readOnly="true"></input> <input type="button" onclick="copyToBuffer()" value="Copy"><br>

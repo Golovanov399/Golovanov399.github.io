@@ -1,7 +1,7 @@
 var width = document.getElementById("myCanvas").width;
 var height = document.getElementById("myCanvas").height;
 
-const Point = (x, y) => ({x, y});
+const Point = (x, y, fixed) => ({x, y, fixed});
 
 const list = {
 	items: null,
@@ -210,7 +210,7 @@ function chooseTask(idx) {
 
 	pts.items = [];
 	lines.items = [];
-	fig["vertices"].forEach(pt => { pts.add(Point((pt[0] - minX) * sz, (pt[1] - minY) * sz)) });
+	fig["vertices"].forEach(pt => { pts.add(Point((pt[0] - minX) * sz, (pt[1] - minY) * sz, false)) });
 	fig["edges"].forEach(uv => { lines.add(Line(uv[0], uv[1], d2(pts.items[uv[0]], pts.items[uv[1]]))) });
 }
 
@@ -248,6 +248,10 @@ const pointStyle = {
 	lineWidth: 1,
 	strokeStyle: "blue",
 }
+const fixedPointStyle = {
+	lineWidth: 3,
+	strokeStyle: "blue",
+}
 const outsidePointStyle = {
 	lineWidth: 2,
 	strokeStyle: "magenta",
@@ -259,6 +263,10 @@ const highlightStyle = {
 const gridStyle = {
 	lineWidth: 1,
 	strokeStyle: "#bbb",
+}
+
+Number.prototype.clamp = function(min, max) {
+	return Math.min(max, Math.max(min, this));
 }
 
 function update(timer) {
@@ -279,7 +287,7 @@ function update(timer) {
 				line.len = Math.round(line.len / sz / sz) * nsz * nsz;
 			});
 		} else {
-			fig["vertices"].forEach(pt => { pts.add(Point((pt[0] - minX) * nsz, (pt[1] - minY) * nsz)) });
+			fig["vertices"].forEach(pt => { pts.add(Point((pt[0] - minX) * nsz, (pt[1] - minY) * nsz, false)) });
 			fig["edges"].forEach(uv => { lines.add(Line(uv[0], uv[1], d2(pts.items[uv[0]], pts.items[uv[1]]))) });
 		}
 		sz = nsz;
@@ -314,6 +322,58 @@ function update(timer) {
 		closestPoint.x = closestGrid(mouse.x + dragOffsetX);
 		closestPoint.y = closestGrid(mouse.y + dragOffsetY);
 		cursor = "move";
+
+		document.getElementById("result").value = '{"vertices": [' + pts.items.map(pt => "[" + (minX + Math.round(pt.x / sz)) + ", " + (minY + Math.round(pt.y / sz)) + "]").join(", ") + ']}';
+		document.getElementById("score").innerHTML = 'Score: ' + calcScore();
+	} else if (mouse.dragEnd) {
+		if (mouse.dragStartX === mouse.x && mouse.dragStartY === mouse.y) {
+			if (closestPoint) {
+				closestPoint.fixed ^= true;
+			}
+		}
+		mouse.dragEnd = false;
+	}
+
+	if (document.getElementById("stringsCheck").checked) {
+		var ds = [];
+		pts.eachItem(pt => {
+			if (pt.fixed || (pt === closestPoint && mouse.drag)) {
+				ds.push([0, 0]);
+				return;
+			}
+			var dx = 0, dy = 0;
+			lines.eachItem(line => {
+				if (pts.items[line.p1] !== pt && pts.items[line.p2] !== pt) {
+					return;
+				}
+				const cur = d2(pts.items[line.p1], pts.items[line.p2]);
+				if (cur == 0) {
+					//
+				} else if (cur < line.len * (1 - eps)) {
+					const k = Math.sqrt(line.len * (1 - eps) / cur) - 1;
+					const idx = pts.items[line.p1] === pt ? line.p2 : line.p1;
+					dx -= (pts.items[idx].x - pt.x) * k;
+					dy -= (pts.items[idx].y - pt.y) * k;
+				} else if (cur > line.len * (1 + eps)) {
+					const k = 1 - Math.sqrt(line.len * (1 + eps) / cur);
+					const idx = pts.items[line.p1] === pt ? line.p2 : line.p1;
+					dx += (pts.items[idx].x - pt.x) * k;
+					dy += (pts.items[idx].y - pt.y) * k;
+				}
+			});
+			// pt.x = closestGrid(pt.x + dx);
+			// pt.y = closestGrid(pt.y + dy);
+			const h = Math.hypot(dx, dy);
+			if (h > 10) {
+				dx = dx / h * 10;
+				dy = dy / h * 10;
+			}
+			ds.push([dx, dy]);
+		});
+		for (var i = 0; i < pts.items.length; ++i) {
+			pts.items[i].x = closestGrid(pts.items[i].x + ds[i][0]).clamp(0, (maxX - minX) * sz);
+			pts.items[i].y = closestGrid(pts.items[i].y + ds[i][1]).clamp(0, (maxY - minY) * sz);
+		}
 
 		document.getElementById("result").value = '{"vertices": [' + pts.items.map(pt => "[" + (minX + Math.round(pt.x / sz)) + ", " + (minY + Math.round(pt.y / sz)) + "]").join(", ") + ']}';
 		document.getElementById("score").innerHTML = 'Score: ' + calcScore();
@@ -357,7 +417,7 @@ function update(timer) {
 		if (pt === closestPoint) {
 			setStyle(highlightStyle);
 		} else if (isIn(p)) {
-			setStyle(pointStyle);
+			setStyle(pt.fixed ? fixedPointStyle : pointStyle);
 		} else {
 			setStyle(outsidePointStyle);
 		}
@@ -403,5 +463,5 @@ function loadFromField() {
 	var old = document.getElementById("oldResult");
 	const verts = JSON.parse(old.value)
 	pts.items = [];
-	verts["vertices"].forEach(pt => { pts.add(Point((pt[0] - minX) * sz, (pt[1] - minY) * sz)) });
+	verts["vertices"].forEach(pt => { pts.add(Point((pt[0] - minX) * sz, (pt[1] - minY) * sz, false)) });
 }
