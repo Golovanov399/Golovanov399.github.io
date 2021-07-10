@@ -115,6 +115,67 @@ function closestGrid(x) {
 	}
 }
 
+function cross(p, q) {
+	return p[0] * q[1] - p[1] * q[0];
+}
+
+function dot(p, q) {
+	return p[0] * q[0] + p[1] * q[1];
+}
+
+function vec(p, q) {
+	return [q[0] - p[0], q[1] - p[1]];
+}
+
+function isOnSegment(p, a, b) {
+	return cross(vec(a, p), vec(b, p)) == 0 &&
+		   dot(vec(a, p), vec(b, p)) <= 0;
+}
+
+function isOnBoundary(p) {
+	for (var i in hole) {
+		if (isOnSegment(p, hole[i], hole[(i + 1) % hole.length])) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function segIntersects(u, v, p, q) {
+	if (cross(vec(u, v), vec(p, q)) == 0) {
+		return isOnSegment(p, u, v) || isOnSegment(q, u, v) || isOnSegment(u, p, q) || isOnSegment(v, p, q);
+	} else {
+		return cross(vec(u, p), vec(u, v)) * cross(vec(u, q), vec(u, v)) <= 0 &&
+			   cross(vec(p, u), vec(p, q)) * cross(vec(p, v), vec(p, q)) <= 0;
+	}
+}
+
+function isIn(p) {
+	if (isOnBoundary(p)) {
+		return true;
+	}
+	var x = p[0] + 1;
+	hole.forEach(q => { x = Math.max(x, q[0] + 1); })
+	var q = [x, p[1]];
+	var par = 0;
+	for (var i in hole) {
+		var u = hole[i];
+		var v = hole[(i + 1) % hole.length];
+		if (isOnSegment(u, p, q) && !isOnSegment(v, p, q)) {
+			par = 1 - par;
+		}
+		if (segIntersects(u, v, p, q)) {
+			if (isOnSegment(u, p, q) || isOnSegment(v, p, q)) {
+				if (v[1] > u[1]) {
+					par = 1 - par;
+				}
+			} else {
+				par = 1 - par;
+			}
+		}
+	}
+	return par ? true : false;
+}
 
 function chooseTask(idx) {
 	task = tasks[idx];
@@ -187,9 +248,17 @@ const pointStyle = {
 	lineWidth: 1,
 	strokeStyle: "blue",
 }
+const outsidePointStyle = {
+	lineWidth: 2,
+	strokeStyle: "magenta",
+}
 const highlightStyle = {
 	lineWidth: 3,
 	strokeStyle: "red",
+}
+const gridStyle = {
+	lineWidth: 1,
+	strokeStyle: "#bbb",
 }
 
 function update(timer) {
@@ -250,6 +319,20 @@ function update(timer) {
 		document.getElementById("score").innerHTML = 'Score: ' + calcScore();
 	}
 
+	setStyle(gridStyle);
+	for (var i = minX; i < maxX; ++i) {
+		ctx.beginPath();
+		ctx.moveTo((i - minX + 1) * sz, 0);
+		ctx.lineTo((i - minX + 1) * sz, (maxY - minY) * sz);
+		ctx.stroke();
+	}
+	for (var i = minY; i < maxY; ++i) {
+		ctx.beginPath();
+		ctx.moveTo(0, (i - minY + 1) * sz);
+		ctx.lineTo((maxX - minX) * sz, (i - minY + 1) * sz);
+		ctx.stroke();
+	}
+
 	lines.eachItem(line => {
 		const cur = d2(pts.items[line.p1], pts.items[line.p2]);
 		if (cur < line.len * (1 - eps)) {
@@ -263,20 +346,37 @@ function update(timer) {
 		drawLine(line);
 		ctx.stroke();
 	});
+
 	// setStyle(lineStyle);
 	// ctx.beginPath();
 	// lines.draw();
 	// ctx.stroke();
-	setStyle(pointStyle);
-	ctx.beginPath();
-	pts.draw();
-	ctx.stroke();
-	setStyle(highlightStyle);
-	ctx.beginPath();
-	if (closestPoint) {
-		drawPoint(closestPoint);
-	}
-	ctx.stroke();
+
+	pts.eachItem(pt => {
+		const p = [Math.round(pt.x / sz) + minX, Math.round(pt.y / sz) + minY];
+		if (pt === closestPoint) {
+			setStyle(highlightStyle);
+		} else if (isIn(p)) {
+			setStyle(pointStyle);
+		} else {
+			setStyle(outsidePointStyle);
+		}
+		ctx.beginPath();
+		drawPoint(pt);
+		ctx.stroke();
+	});
+
+	// setStyle(pointStyle);
+	// ctx.beginPath();
+	// pts.draw();
+	// ctx.stroke();
+
+	// setStyle(highlightStyle);
+	// ctx.beginPath();
+	// if (closestPoint) {
+	// 	drawPoint(closestPoint);
+	// }
+	// ctx.stroke();
 
 	if (closestPoint) {
 		setStyle(lineStyle);
