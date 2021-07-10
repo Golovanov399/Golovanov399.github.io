@@ -133,7 +133,7 @@ function isOnSegment(p, a, b) {
 }
 
 function isOnBoundary(p) {
-	for (var i in hole) {
+	for (var i = 0; i < hole.length; ++i) {
 		if (isOnSegment(p, hole[i], hole[(i + 1) % hole.length])) {
 			return true;
 		}
@@ -158,7 +158,7 @@ function isIn(p) {
 	hole.forEach(q => { x = Math.max(x, q[0] + 1); })
 	var q = [x, p[1]];
 	var par = 0;
-	for (var i in hole) {
+	for (var i = 0; i < hole.length; ++i) {
 		var u = hole[i];
 		var v = hole[(i + 1) % hole.length];
 		if (isOnSegment(u, p, q) && !isOnSegment(v, p, q)) {
