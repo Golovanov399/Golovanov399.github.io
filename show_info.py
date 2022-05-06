@@ -23,8 +23,9 @@ for prob in probs:
 	if "problem_solved" in prob.attrs["class"] or "own_problem_solved" in prob.find("div").attrs["class"]:
 		continue
 	divs = prob.find_all("div")
-	if len(divs) != 6:
-		divs = divs[:-2] + [101] + divs[-2:]
+	# if len(divs) != 6:
+	if divs[3].text.endswith("finalised)"):
+		divs = divs[:3] + [101] + divs[4:]
 	_, idx, solved, difficulty, name, _ = divs
 	if difficulty == 101:
 		unsolved.append((101, int(idx.text.split()[-1]), name.text.strip('"'), int(solved.text.split()[-1])))
