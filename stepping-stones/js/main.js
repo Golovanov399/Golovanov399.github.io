@@ -160,6 +160,15 @@ function CellMap() {
 		}
 		return res;
 	};
+	this.hasLargeNeighbors = function(x, y) {
+		var res = false;
+		this.placed.forEach(el => {
+			if (Math.abs(el.e.x - x) <= 1 && Math.abs(el.e.y - y) <= 1 && el.l > 1) {
+				res = true;
+			}
+		});
+		return res;
+	};
 	this.evaluate = function() {
 		this.placed.forEach(el => {
 			let x = el.e.x;
@@ -248,7 +257,7 @@ function update(timer) {
 				}
 			} else if (mouse.which === 0) {
 				const num = 1;
-				if (cm.getEvaluated(chosenX, chosenY) === 1 || (cm.getEvaluated(chosenX, chosenY) === undefined && cm.getPlaced(chosenX, chosenY) === undefined)) {
+				if (cm.getPlaced(chosenX, chosenY) === undefined && !cm.hasLargeNeighbors(chosenX, chosenY)) {
 					ones.push(Entry(chosenX, chosenY));
 					cm.place(Entry(chosenX, chosenY), num);
 					hist.push(1);
