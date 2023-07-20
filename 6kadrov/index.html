@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Угадай клип по кадрам</title>
+	<script type="text/javascript">
+		const min_clip = 1;
+		const max_clip = 16;
+		const min_frame = 1;
+		const max_frame = 6;
+		var clip = max_clip;
+		var frame = 1;
+
+		function update() {
+			document.getElementById("desc").innerHTML = "Клип " + clip + ", кадр " + frame;
+			document.getElementById("frame").src = "frames/" + clip.toString().padStart(2, '0') + "_" + frame + ".png";
+			document.getElementById("prev_clip").disabled = (clip == min_clip);
+			document.getElementById("prev_frame").disabled = (frame == min_frame);
+			document.getElementById("next_frame").disabled = (frame == max_frame);
+			document.getElementById("next_clip").disabled = (clip == max_clip);
+		}
+
+		window.onload = update;
+	</script>
+</head>
+<body bgcolor=#eeeeee>
+<center>
+	<div id=desc style="font-size: 24;">...</div><br>
+	<img id=frame src="" style="width: 80%"/><br>
+	<button id=prev_clip onclick="clip -= 1; frame = min_frame; update();"><< клип</button>
+	<button id=prev_frame onclick="frame -= 1; update();">< кадр</button>
+	<button id=next_frame onclick="frame += 1; update();">> кадр</button>
+	<button id=next_clip onclick="clip += 1; frame = min_frame; update();">>> клип</button>
+</center>
+</body>
+</html>
